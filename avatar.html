@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice To Sign Language Tool</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./voicestyle.css">
+</head>
+<body>
+    <nav>
+        <div class="nav_container">
+            <div class="logo">
+                <img src="./images/dialogix_logo.png" alt="Logo">
+            </div>
+            <div class="nav_menu">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="join.html">Join</a>
+                <a href="contact us.html">Contact</a>
+            </div>
+            <button id="open-menu-btn">&#9776;</button>
+            <button id="close-menu-btn">&times;</button>
+        </div>
+    </nav>
+
+    <script>
+        document.getElementById('open-menu-btn').addEventListener('click', function () {
+            document.querySelector('.nav_menu').classList.add('show');
+            document.getElementById('open-menu-btn').style.display = 'none';
+            document.getElementById('close-menu-btn').style.display = 'inline-block';
+        });
+
+        document.getElementById('close-menu-btn').addEventListener('click', function () {
+            document.querySelector('.nav_menu').classList.remove('show');
+            document.getElementById('close-menu-btn').style.display = 'none';
+            document.getElementById('open-menu-btn').style.display = 'inline-block';
+        });
+
+        window.addEventListener('resize', function () {
+            if (window.innerWidth >= 769) {
+                document.querySelector('.nav_menu').classList.remove('show');
+                document.getElementById('close-menu-btn').style.display = 'none';
+                document.getElementById('open-menu-btn').style.display = 'none';
+            } else {
+                document.getElementById('open-menu-btn').style.display = 'inline-block';
+            }
+        });
+    </script>
+
+    <div class="container">
+        <div class="chat-box-container">
+            <div class="chat-box" id="chatBox"></div>
+            <div class="input-container">
+                <input type="text" id="speechToText" placeholder="Type a message...">
+                <button class="mic" onclick="record()">
+                    <img src="https://img.icons8.com/ios-filled/50/ffffff/microphone.png"/>
+                </button>
+                <button class="send" onclick="processText()">
+                    <img src="https://img.icons8.com/ios-glyphs/30/ffffff/filled-sent.png"/>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Handling Enter key for text input
+        document.getElementById('speechToText').addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission if in a form
+                processText();
+            }
+        });
+
+        function addMessageToChatBox(message, isUser = true) {
+            const chatBox = document.getElementById('chatBox');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('chat-message', isUser ? 'user' : 'bot');
+            messageElement.innerHTML = `
+                <div class="message">${message}</div>
+                <div class="video-wrapper"></div>`;
+            chatBox.appendChild(messageElement);
+
+            // Scroll to the most recent message
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            return messageElement.querySelector('.video-wrapper');
+        }
+
+        function record() {
+            try {
+                var recognition = new webkitSpeechRecognition();
+                recognition.lang = 'en-IN';
+                recognition.onresult = function(event) {
+                    const speechText = event.results[0][0].transcript;
+                    document.getElementById('speechToText').value = speechText;
+                    processText();
+                }
+                recognition.start();
+            } catch (error) {
+                console.error('Speech recognition error:', error);
+            }
+        }
+
+        function processText() {
+            const textInput = document.getElementById('speechToText');
+            const text = textInput.value.trim();
+            textInput.value = '';
+            if (text) {
+                const videoWrapper = addMessageToChatBox(text);
+
+                // Prepare the video source URLs
+                const words = text.split(' ');
+                const videoSrcs = words.map(word => `assets/${word}.mp4`);
+
+                // Play videos sequentially
+                playVideosSequentially(videoSrcs, videoWrapper);
+            }
+        }
+
+        function playVideosSequentially(videoSrcs, videoWrapper) {
+            const videoPlayer = document.createElement('video');
+            videoPlayer.classList.add('video-player');
+            videoPlayer.autoplay = true;
+            videoPlayer.muted = true;
+            videoPlayer.playsInline = true;
+            videoWrapper.appendChild(videoPlayer);
+
+            let currentIndex = 0;
+
+            function playNextVideo() {
+                if (currentIndex < videoSrcs.length) {
+                    videoPlayer.src = videoSrcs[currentIndex];
+                    videoPlayer.load();
+                    videoPlayer.play();
+
+                    videoPlayer.onended = () => {
+                        currentIndex++;
+                        playNextVideo();
+                    };
+
+                    videoPlayer.onloadeddata = () => {
+                        const chatBox = document.getElementById('chatBox');
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    };
+                }
+            }
+
+            // Start playing the first video
+            playNextVideo();
+        }
+    </script>
+</body>
+</html>

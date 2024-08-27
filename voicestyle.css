@@ -1,0 +1,294 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background: #404040;
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  color: #ECF0F1;
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+ /*======= NAVBAR ======*/
+ nav {
+  background-color: #13767a;
+  padding: 10px;
+  width: 100%;
+  height: 10px; /* Set height for the navigation bar */
+  position: fixed;
+  top: 0;
+  z-index: 11;
+}
+
+.nav_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%; /* Ensure container takes full height of nav */
+}
+
+.logo {
+  margin-right: 0; /* Remove margin to align logo to the left */
+}
+
+.logo img {
+  width: 100px; /* Reduce size of the logo */
+  height: auto;
+  object-fit: contain;
+}
+
+.nav_menu {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  margin-left: auto; /* Push navbar items to the right */
+}
+
+.nav_menu a {
+  font-size: 0.9rem;
+  transition: 0.3s;
+  color: #fff;
+  padding: 10px;
+}
+
+.nav_menu a:hover {
+  background: #13767a;
+}
+
+nav button {
+  background: transparent;
+  font-size: 1.8rem;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  z-index: 12;
+  display: none; /* Hide buttons by default */
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .nav_menu {
+    display: none; /* Hide menu by default on small screens */
+    flex-direction: column;
+    gap: 1.5rem;
+    position: fixed;
+    top: 3.5rem;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    background: #1a8e92;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+  }
+
+  .nav_menu.show {
+    display: flex;
+  }
+
+  nav button#open-menu-btn {
+    display: inline-block; /* Show open button on small screens */
+  }
+
+  nav button#close-menu-btn {
+    display: none; /* Initially hide close button */
+  }
+
+  .nav_menu.show + nav button#close-menu-btn {
+    display: inline-block; /* Show close button when menu is visible */
+  }
+
+  /* Add space between logo and menu button */
+  .logo {
+    margin-right: auto; /* Make the logo push the button to the right */
+  }
+
+  /* Additional margin to the menu button */
+  nav button#open-menu-btn,
+  nav button#close-menu-btn {
+    margin-left: 1rem; /* Adjust the value as needed */
+  }
+}
+
+@media (max-width: 768px) {
+  .nav_menu {
+    top: 2.5rem; /* Adjust top position for smaller screens */
+  }
+
+  .nav_menu.show + nav button#close-menu-btn {
+    display: inline-block; /* Show close button when menu is visible */
+  }
+
+  .logo img {
+    width: 80px; /* Further reduce the size of the logo */
+  }
+
+  nav button#open-menu-btn,
+  nav button#close-menu-btn {
+    font-size: 1.5rem;
+    padding: 5px 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nav_menu {
+    top: 2.5rem; /* Adjust top position for smaller screens */
+  }
+
+  .nav_menu.show + nav button#close-menu-btn {
+    display: inline-block; /* Show close button when menu is visible */
+  }
+
+  .logo img {
+    width: 60px; /* Further reduce the size of the logo */
+  }
+
+  nav button#open-menu-btn,
+  nav button#close-menu-btn {
+    font-size: 1.3rem;
+    padding: 5px 8px;
+  }
+}
+
+@media (max-width: 329px) {
+  .nav_menu {
+    top: 2.5rem; /* Adjust top position for smaller screens */
+  }
+
+  .nav_menu.show + nav button#close-menu-btn {
+    display: inline-block; /* Show close button when menu is visible */
+  }
+
+  .logo img {
+    width: 50px; /* Further reduce the size of the logo */
+  }
+
+  nav button#open-menu-btn,
+  nav button#close-menu-btn {
+    font-size: 1.1rem;
+    padding: 4px 6px;
+  }
+}
+
+
+@media (min-width: 769px) {
+  nav button#open-menu-btn,
+  nav button#close-menu-btn {
+    display: none; /* Hide buttons on large screens */
+  }
+}
+
+ /*====== end of naV bar======== */
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 800px;
+  height: 85%;
+  background-color: #303030;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 10px #00d1ff, 0 0 20px #00d1ff, 0 0 30px #00d1ff;
+  border: 3px solid #00d1ff;
+}
+
+.chat-box-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.chat-box {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  background-color: #404040;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+}
+
+
+.chat-message {
+  display: flex;
+  align-items: flex-start;
+  padding: 10px;
+  border-radius: 15px;
+  max-width: 75%;
+  position: relative;
+}
+
+.chat-message.user {
+  justify-content: flex-end;
+}
+
+.chat-message.bot {
+  justify-content: flex-start;
+}
+
+.message {
+  background-color: #1ABC9C;
+  color: #34495E;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-size: 16px;
+}
+
+.message.bot {
+  background-color: #34495E;
+  color: #ECF0F1;
+}
+
+.video-wrapper {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.video-wrapper video {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 10px;
+  /* Hide controls */
+  display: block;
+}
+
+.input-container {
+  display: flex;
+  padding: 10px;
+  background-color: #2C3E50;
+  border-top: 2px solid #1ABC9C;
+}
+
+.input-container input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  outline: none;
+  font-size: 16px;
+  background-color: #34495E;
+  color: #ECF0F1;
+}
+
+.input-container button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.input-container button img {
+  width: 32px;
+  height: 32px;
+}
